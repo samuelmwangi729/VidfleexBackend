@@ -18,9 +18,43 @@ def generate():
 @admin.action(description='Make Marked Featured')
 def make_featured(Movie, request, queryset):
     queryset.update(Status='featured')
+@admin.action(description='Make Marked Latest')
+def make_latest(Movie, request, queryset):
+    queryset.update(Status='latest')
+@admin.action(description='Make Marked Upcoming')
+def make_upcoming(Movie, request, queryset):
+    queryset.update(Status='upcoming')
+@admin.action(description='Make Marked Top Rated')
+def make_top(Movie, request, queryset):
+    queryset.update(Status='top')
+@admin.action(description='Make Marked Suggested')
+def make_suggested(Movie, request, queryset):
+    queryset.update(Status='suggested')
+@admin.action(description='Make Marked Trending')
+def make_trending(Movie, request, queryset):
+    queryset.update(Status='trending')
+@admin.action(description='Recommend Marked Movies')
+def make_recommended(Movie, request, queryset):
+    queryset.update(Status='recommended')
+@admin.action(description='Make Marked Popular')
+def make_popular(Movie, request, queryset):
+    queryset.update(Status='popular')
+@admin.action(description='Make Marked Special')
+def make_special(Movie, request, queryset):
+    queryset.update(Status='special')
 class MovieAdmin(admin.ModelAdmin):
     change_list_template = "Admin/Movies.html"
-    actions=[make_featured]
+    actions=[
+        make_featured,
+        make_latest,
+        make_upcoming,
+        make_top,
+        make_suggested,
+        make_trending,
+        make_recommended,
+        make_popular,
+        make_special,
+    ]
     listDisplay=(
         'img_preview',
         'RandomId',

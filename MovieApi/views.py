@@ -49,3 +49,75 @@ class TrailerList(generics.ListAPIView):
         queryset = self.get_queryset()
         serializer = TrailerSerializer(queryset,many=True)
         return Response(serializer.data)
+class LatestList(generics.ListAPIView):
+    queryset = Movie.latest.all()
+    serializer_class = MovieSerializer
+
+    def list(self,request):
+        queryset = self.get_queryset()
+        serializer = MovieSerializer(queryset,many=True)
+        return Response(serializer.data)
+class UpcomingList(generics.ListAPIView):
+    queryset = Movie.upcoming.all()
+    serializer_class = MovieSerializer
+
+    def list(self,request):
+        queryset = self.get_queryset()
+        serializer = MovieSerializer(queryset,many=True)
+        return Response(serializer.data)
+class FeaturedList(generics.ListAPIView):
+    queryset = Movie.featured.all()
+    serializer_class = MovieSerializer
+
+    def list(self,request):
+        queryset = self.get_queryset()
+        serializer = MovieSerializer(queryset,many=True)
+        return Response(serializer.data)
+class TopList(generics.ListAPIView):
+    queryset = Movie.top.all()
+    serializer_class = MovieSerializer
+
+    def list(self,request):
+        queryset = self.get_queryset()
+        serializer = MovieSerializer(queryset,many=True)
+        return Response(serializer.data)
+class SuggestedList(generics.ListAPIView):
+    queryset = Movie.suggested.all()
+    serializer_class = MovieSerializer
+
+    def list(self,request):
+        queryset = self.get_queryset()
+        serializer = MovieSerializer(queryset,many=True)
+        return Response(serializer.data)
+class TrendingList(generics.ListAPIView):
+    queryset = Movie.trending.all()
+    serializer_class = MovieSerializer
+
+    def list(self,request):
+        queryset = self.get_queryset()
+        serializer = MovieSerializer(queryset,many=True)
+        return Response(serializer.data)
+class RecommendedList(generics.ListAPIView):
+    queryset = Movie.recommended.all()
+    serializer_class = MovieSerializer
+
+    def list(self,request):
+        queryset = self.get_queryset()
+        serializer = MovieSerializer(queryset,many=True)
+        return Response(serializer.data)
+class PopularList(generics.ListAPIView):
+    queryset = Movie.popular.all()
+    serializer_class = MovieSerializer
+
+    def list(self,request):
+        queryset = self.get_queryset()
+        serializer = MovieSerializer(queryset,many=True)
+        return Response(serializer.data)
+class SpecialList(generics.ListAPIView):
+    queryset = Movie.special.all()
+    serializer_class = MovieSerializer
+
+    def list(self,request):
+        queryset = self.get_queryset()
+        serializer = MovieSerializer(queryset,many=True)
+        return Response(serializer.data)
