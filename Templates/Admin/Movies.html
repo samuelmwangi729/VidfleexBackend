@@ -1,0 +1,109 @@
+{% extends 'admin/change_list.html' %}
+{% block object-tools %}
+{% block extrastyle %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" 
+integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {{ block.super }}
+{% endblock %}
+<form class="form-inline" id="moviesForm">
+    {% csrf_token %}
+    <div class="form-group">
+        <input type="number" max-length='4' class="form-control" name="Year" id="movieYear" placeholder="Enter the Movie Year Here" required=True>
+    </div>
+    <button class='btn btn-outline-success' id="loadMovies" type='submit'>Load Movies</button>
+</form>
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+    integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    axios.defaults.xsrfHeaderName = "X-CSRFToken"
+    let btn=document.querySelector("#loadMovies")
+    const getCast = (movieId) =>{
+        let postUrl="postCast/"
+        const options = {
+            method: 'GET',
+            url: `https://moviesminidatabase.p.rapidapi.com/movie/id/${movieId}/cast/`,
+            headers: {
+              'X-RapidAPI-Key': 'ba38e4e931msh8cbd07b515ed9a0p15c2c5jsn87707fbad3c8',
+              'X-RapidAPI-Host': 'moviesminidatabase.p.rapidapi.com'
+            }
+          };
+          
+          axios.request(options).then(function (response) {
+            let casts=response.data.results.roles
+                casts.forEach((item)=>{
+                    data={
+                        role:item.role,
+                        actorId:item.actor.imdb_id,
+                        name:item.actor.name,
+                        movie:movieId
+                    }
+                    axios.post(postUrl,data,{
+                        headers: {
+                            'X-CSRFToken': "{{csrf_token}}"
+                          }
+                    })
+                    .then((res)=>{
+                        if(res.data.status == 'success'){
+                            toastr.success('Cast Successfully Posted')
+                        }
+                    })
+                })
+          }).catch(function (error) {
+              console.error(error);
+          });
+    }
+    const getDetails = (movieId) =>{
+        const options = {
+            method: 'GET',
+            url: `https://moviesminidatabase.p.rapidapi.com/movie/id/${movieId}/`,
+            headers: {
+              'X-RapidAPI-Key': 'ba38e4e931msh8cbd07b515ed9a0p15c2c5jsn87707fbad3c8',
+              'X-RapidAPI-Host': 'moviesminidatabase.p.rapidapi.com'
+            }
+          };
+          
+          axios.request(options).then(function (response) {
+              let postUrl="postVideos/"
+              const data = response.data.results
+              axios.post(postUrl,data,{
+                  headers: {
+                      'X-CSRFToken': "{{csrf_token}}"
+                    }
+              })
+              .then(response=>{
+              }).catch(err=>{
+                  console.error(err)
+              })
+          }).catch(function (error) {
+              console.error(error);
+          });
+    }
+    btn.addEventListener('click',(e)=>{
+        e.preventDefault()
+        let inputDate=document.querySelector("#movieYear").value
+        const options = {
+            method: 'GET',
+            url: `https://moviesminidatabase.p.rapidapi.com/movie/byYear/${inputDate}`,
+            headers: {
+              'X-RapidAPI-Key': 'ba38e4e931msh8cbd07b515ed9a0p15c2c5jsn87707fbad3c8',
+              'X-RapidAPI-Host': 'moviesminidatabase.p.rapidapi.com'
+            }
+          };
+          
+          axios.request(options).then(function (response) {
+            let nextLink=response.data.links.next
+            let results = response.data.results
+            results.forEach((item)=>{
+                //get the movie details here 
+                getDetails(item.imdb_id)
+            }) 
+            
+          }).catch(function (error) {
+              console.error(error);
+          });
+    })
+</script>
+{% endblock object-tools %}
