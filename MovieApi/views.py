@@ -121,3 +121,27 @@ class SpecialList(generics.ListAPIView):
         queryset = self.get_queryset()
         serializer = MovieSerializer(queryset,many=True)
         return Response(serializer.data)
+class BannerList(generics.ListAPIView):
+    queryset = Movie.objects.filter(Status="Banner")
+    serializer_class = MovieSerializer
+
+    def list(self,request):
+        queryset = self.get_queryset()
+        serializer = MovieSerializer(queryset,many=True)
+        return Response(serializer.data)
+class MovieofTheYear(generics.ListAPIView):
+    queryset = Movie.objects.filter(Status="MOY").first()
+    serializer_class = MovieSerializer
+
+    def list(self,request):
+        queryset = self.get_queryset()
+        serializer = MovieSerializer(queryset,many=False)
+        return Response(serializer.data)
+class MostPopular(generics.ListAPIView):
+    queryset = Movie.objects.filter(Status="MOST").first()
+    serializer_class = MovieSerializer
+
+    def list(self,request):
+        queryset = self.get_queryset()
+        serializer = MovieSerializer(queryset,many=False)
+        return Response(serializer.data)

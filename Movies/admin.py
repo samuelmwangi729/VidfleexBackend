@@ -21,6 +21,9 @@ def make_featured(Movie, request, queryset):
 @admin.action(description='Make Marked Latest')
 def make_latest(Movie, request, queryset):
     queryset.update(Status='latest')
+@admin.action(description='Make Banner')
+def make_banner(Movie, request, queryset):
+    queryset.update(Status='Banner')
 @admin.action(description='Make Marked Upcoming')
 def make_upcoming(Movie, request, queryset):
     queryset.update(Status='upcoming')
@@ -42,9 +45,21 @@ def make_popular(Movie, request, queryset):
 @admin.action(description='Make Marked Special')
 def make_special(Movie, request, queryset):
     queryset.update(Status='special')
+@admin.action(description='Set Banners to Images')
+def make_image(Movie, request, queryset):
+    data=list(queryset.values())
+    queryset.update(Image=data[0]['Banner'])
+@admin.action(description="Award Movie of the Year")
+def make_movieYear(Movie,request,queryset):
+    queryset.update(Status="MOY")
+@admin.action(description="Most Popular")
+def make_mostpopular(Movie,request,queryset):
+    queryset.update(Status="MOST")
 class MovieAdmin(admin.ModelAdmin):
     change_list_template = "Admin/Movies.html"
     actions=[
+        make_image,
+        make_mostpopular,
         make_featured,
         make_latest,
         make_upcoming,
@@ -54,6 +69,8 @@ class MovieAdmin(admin.ModelAdmin):
         make_recommended,
         make_popular,
         make_special,
+        make_banner,
+        make_movieYear
     ]
     listDisplay=(
         'img_preview',
@@ -71,6 +88,22 @@ class MovieAdmin(admin.ModelAdmin):
     def get_status(self,obj):
         if obj.Status == 'featured':
             return format_html(f'<div class="badge badge-sm badge-primary">{obj.Status}</div>')
+        elif obj.Status == 'latest':
+            return format_html(f'<div class="badge badge-sm badge-primary" style="background-color:red;color:white">{obj.Status}</div>')
+        elif obj.Status == 'upcoming':
+            return format_html(f'<div class="badge badge-sm badge-primary" style="background-color:purple;color:white">{obj.Status}</div>')
+        elif obj.Status == 'top':
+            return format_html(f'<div class="badge badge-sm badge-primary" style="background-color:green;color:white">{obj.Status}</div>')
+        elif obj.Status == 'suggested':
+            return format_html(f'<div class="badge badge-sm badge-primary" style="background-color:deeppink;color:white">{obj.Status}</div>')
+        elif obj.Status == 'trending':
+            return format_html(f'<div class="badge badge-sm badge-primary" style="background-color:deepblue;color:white">{obj.Status}</div>')
+        elif obj.Status == 'recommended':
+            return format_html(f'<div class="badge badge-sm badge-primary" style="background-color:magenta;color:white">{obj.Status}</div>')
+        elif obj.Status == 'popular':
+            return format_html(f'<div class="badge badge-sm badge-primary" style="background-color:cyan;color:white">{obj.Status}</div>')
+        elif obj.Status == 'special':
+            return format_html(f'<div class="badge badge-sm badge-primary" style="background-color:indigo;color:white">{obj.Status}</div>')
         else:
              return format_html(f'<div class="badge badge-sm badge-warning text-white">{obj.Status}</div>')
     def img_preview(self,obj): #new
@@ -119,6 +152,7 @@ class MovieAdmin(admin.ModelAdmin):
         starating=data['rating']
         plot=data['plot']
         banner=data['banner']
+        image=data['image_url']
         genres=data['gen'] #array 
         keywords = data['keywords'] #array
         trailer = data['trailer']
@@ -159,6 +193,7 @@ class MovieAdmin(admin.ModelAdmin):
                 MovieLength=movielength,
                 StarRatings=starating,
                 Banner=banner,
+                Image=image,
                 RandomId=randomId,
             )
             movieInstance.Genres.set(genresArray)

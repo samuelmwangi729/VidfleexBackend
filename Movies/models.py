@@ -53,6 +53,7 @@ class Movie(models.Model):
     Genres=models.ManyToManyField(Genre,related_name="genres")
     MovieKeywords=models.ManyToManyField(Keyword) #one to many field 
     Banner=models.CharField(max_length=200,help_text="Movie Banner to display")
+    Image=models.CharField(max_length=200,help_text="Image to Display to Frontends",default=Banner)
     RandomId=models.CharField(max_length=20)
     objects=models.Manager()
     latest=Latest()
@@ -73,4 +74,4 @@ class Movie(models.Model):
     class Meta:
         verbose_name="Movie"
         verbose_name_plural="Movies"
-        ordering=['YoR']
+        ordering=['-YoR']

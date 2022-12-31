@@ -18,6 +18,7 @@ class MovieSerializer(serializers.ModelSerializer):
             'MovieLength',
             'StarRatings',
             'Banner',
+            'Image',
             'Genres',
             'MovieKeywords',
             'RandomId',

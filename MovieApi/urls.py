@@ -14,4 +14,7 @@ urlpatterns = [
     path("Recommended/",views.RecommendedList.as_view(),name="recommended"),
     path("Popular/",views.PopularList.as_view(),name="popular"),
     path("Special/",views.SpecialList.as_view(),name="special"),
+    path("Banner/",views.BannerList.as_view(),name="banner"),
+    path("MoY/",views.MovieofTheYear.as_view(),name="moy"),
+    path("MostPopular/",views.MostPopular.as_view(),name="mop"),
 ]
