@@ -15,6 +15,7 @@ urlpatterns = [
     path("Popular/",views.PopularList.as_view(),name="popular"),
     path("Special/",views.SpecialList.as_view(),name="special"),
     path("Banner/",views.BannerList.as_view(),name="banner"),
+    path("Sliders/",views.SlidersList.as_view(),name="sliders"),
     path("MoY/",views.MovieofTheYear.as_view(),name="moy"),
     path("MostPopular/",views.MostPopular.as_view(),name="mop"),
 ]

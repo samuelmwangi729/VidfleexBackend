@@ -55,10 +55,14 @@ def make_movieYear(Movie,request,queryset):
 @admin.action(description="Most Popular")
 def make_mostpopular(Movie,request,queryset):
     queryset.update(Status="MOST")
+@admin.action(description="Make Selected Movies Sliders")
+def make_sliders(Movie,request,queryset):
+    queryset.update(Status="Sliders")
 class MovieAdmin(admin.ModelAdmin):
     change_list_template = "Admin/Movies.html"
     actions=[
         make_image,
+        make_sliders,
         make_mostpopular,
         make_featured,
         make_latest,
