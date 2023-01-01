@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'Trailers.apps.TrailersConfig',
     'Cast.apps.CastConfig',
     'MovieApi.apps.MovieapiConfig',
+    'Contact.apps.ContactConfig',
 ]
 
 MIDDLEWARE = [

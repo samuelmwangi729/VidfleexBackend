@@ -7,6 +7,8 @@ from Cast.models import Cast
 from Genres.models import Genre
 from Trailers.models import Trailer
 import json
+from Contact.models import Contact
+from django.http import JsonResponse
 # Create your views here.
 
 class MoviesList(generics.ListAPIView):
@@ -153,3 +155,16 @@ class MostPopular(generics.ListAPIView):
         queryset = self.get_queryset()
         serializer = MovieSerializer(queryset,many=False)
         return Response(serializer.data)
+class getMessage(generics.CreateAPIView):
+    def post(self,request):
+        data = json.loads(request.body)
+        clientName= data['name']
+        clientEmail = data['email']
+        clientMessage = data['message']
+        contact = Contact.objects.create(
+            ClientName = clientName,
+            Email = clientEmail,
+            Message = clientMessage
+        )
+        message={'data':'Message Successfully Sent'}
+        return JsonResponse(message)

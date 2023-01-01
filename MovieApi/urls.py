@@ -18,4 +18,5 @@ urlpatterns = [
     path("Sliders/",views.SlidersList.as_view(),name="sliders"),
     path("MoY/",views.MovieofTheYear.as_view(),name="moy"),
     path("MostPopular/",views.MostPopular.as_view(),name="mop"),
+    path("PostMessage/",views.getMessage.as_view(),name="contact"),
 ]
