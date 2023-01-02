@@ -19,4 +19,6 @@ urlpatterns = [
     path("MoY/",views.MovieofTheYear.as_view(),name="moy"),
     path("MostPopular/",views.MostPopular.as_view(),name="mop"),
     path("PostMessage/",views.getMessage.as_view(),name="contact"),
+    path("Details/<str:movieId>",views.getDetails.as_view(),name="details"),
+    path("Trailer/<str:movieId>",views.getTrailer.as_view(),name="trailer"),
 ]

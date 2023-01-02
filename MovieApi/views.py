@@ -153,7 +153,7 @@ class MostPopular(generics.ListAPIView):
 
     def list(self,request):
         queryset = self.get_queryset()
-        serializer = MovieSerializer(queryset,many=False)
+        serializer = self.get_serializer(queryset,many=False)
         return Response(serializer.data)
 class getMessage(generics.CreateAPIView):
     def post(self,request):
@@ -168,3 +168,38 @@ class getMessage(generics.CreateAPIView):
         )
         message={'data':'Message Successfully Sent'}
         return JsonResponse(message)
+class getDetails(generics.ListAPIView):
+    queryset = Movie.objects.all()
+    serializer_class = MovieSerializer
+    cast_serializer = CastSerializer
+    lookup_url_kwarg ="movieId"
+    def get_queryset(self):
+        movieId = self.kwargs.get(self.lookup_url_kwarg)
+        singleMovie = Movie.objects.filter(RandomId=movieId).first()
+        return singleMovie
+
+    def list(self,request,movieId):
+        queryset = self.get_queryset()
+        cast = Cast.objects.filter(ActorMovie=queryset)
+        castData = CastSerializer(cast,many=True)
+        serializer = self.get_serializer(queryset,many=False)
+        data=serializer.data
+        #get the cast and the trailers here 
+        #to append data here, we user data['key']=value
+        data['Cast']=castData.data
+        return Response(data)
+class getTrailer(generics.ListAPIView):
+    queryset = Trailer.objects.all()
+    serializer_class = TrailerSerializer
+    lookup_url_kwarg = "movieId"
+
+    def get_queryset(self):
+        movieId = self.kwargs.get(self.lookup_url_kwarg)
+        movie =Movie.objects.filter(RandomId=movieId).first()
+        trailer = Trailer.objects.filter(MovieName=movie).first()
+        return trailer
+
+    def list(self,request,movieId):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset,many=False)
+        return Response(serializer.data)
